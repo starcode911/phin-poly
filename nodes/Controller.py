@@ -16,7 +16,6 @@ import socket
 import math
 import re
 import json
-from weather_funcs import *
 import ns_parameters
 import node_funcs
 
@@ -92,27 +91,7 @@ class Controller(polyinterface.Controller):
         self.query_conditions(False)
 
     def get_phin_data(self, url_param, extra=None):
-        request = 'http://api.weatherbit.io/v2.0/'
-        request += url_param
-        request += '?key=' + self.params.get('Token')
-        
-
-        if extra != None:
-            request += extra
-
-        LOGGER.debug('request = %s' % request)
-
-        try:
-            c = requests.get(request)
-            jdata = c.json()
-            c.close()
-
-            LOGGER.debug(jdata)
-        except:
-            LOGGER.error('HTTP request failed for ' + url_param)
-            jdata = {}
-
-        return jdata
+        return NONE
 
     """
         Query the pHin service for the pool data
@@ -120,24 +99,19 @@ class Controller(polyinterface.Controller):
     def query_conditions(self, force):
 
 
-        if not self.configured:
-            LOGGER.info('Skipping connection because we aren\'t configured yet.')
-            return
+        #if not self.configured:
+        #    LOGGER.info('Skipping connection because we aren\'t configured yet.')
+        #    return
 
-        jdata = self.get_phin_data('current')
+        #jdata = self.get_phin_data('current')
 
         # Should we check that jdata actually has something in it?
-        if jdata == None:
-            LOGGER.error('Current condition query returned no data')
-            return
+        #if jdata == None:
+        #   LOGGER.error('Current condition query returned no data')
+        #  return
 
-        if 'data' not in jdata:
-            LOGGER.error('No response object in query response.')
-            return
-
-        ob = jdata['data'][0] # Only use first observation record
-
-        self.update_driver('WATERT', ob['temp'], force)
+       
+        self.update_driver('WATERT', 101, force)
         self.update_driver('GV1', 7.1, force)
         
 
