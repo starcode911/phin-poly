@@ -1,0 +1,22 @@
+<nodeDefs>
+  <nodeDef id="phin" nodeType="139" nls="ctl">
+    <editors />
+    <sts>
+      <st id="ST" editor="bool" />
+      <st id="WATERT" editor="TEMPERATURE" />
+      <st id="GV1" editor="PH" />
+    </sts>
+    <cmds>
+      <sends />
+      <accepts>
+        <cmd id="DISCOVER" />
+        <cmd id="REMOVE_NOTICES_ALL" />
+        <cmd id="UPDATE_PROFILE" />
+		<cmd id="DEBUG">
+			<p id="" editor="DEBUG" init="GV21"/>
+		</cmd>
+      </accepts>
+    </cmds>
+  </nodeDef>
+
+</nodeDefs>

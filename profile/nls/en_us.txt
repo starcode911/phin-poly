@@ -1,0 +1,22 @@
+# controller
+ND-phin-NAME = pHin Data
+ND-phin-ICON = TempSensor
+CMD-ctl-DISCOVER-NAME = Re-Discover
+CMD-ctl-UPDATE_PROFILE-NAME = Update Profile
+CMD-ctl-REMOVE_NOTICES_ALL-NAME = Remove Notices
+CMD-ctl-DEBUG-NAME = Log Level
+ST-ctl-ST-NAME = NodeServer Online
+ST-ctl-WATERT-NAME = Water Temperature
+ST-ctl-GV1-NAME = pH
+ST-ctl-GV21-NAME = Debug Level
+
+DBG-0 = Off
+DBG-10 = Debug
+DBG-20 = Info
+DBG-30 = Warning
+DBG-40 = Error
+DBG-50 = Critical
+
+
+
+

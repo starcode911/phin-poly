@@ -1,0 +1,20 @@
+{
+    "name": "pHin   ",
+    "docs": "https://github.com/starcode911/phin-poly/README.md",
+    "type": "python3",
+    "executable": "phin-poly.py",
+    "install": "install.sh",
+    "install_cloud": "install_cloud.sh",
+    "description": "pHin Smart Water Monitor",
+   "shortPoll": "300",
+    "longPoll": "600",
+    "profile_version": "0.1.0",
+    "credits": [ {
+	"title": "pHin Smart Water Monitor for Polyglot/ISY",
+    	"author": "starcode911",
+    	"version": "0.1.0",
+    	"date": "September, 2020",
+    	"source": "https://github.com/starcode911/phin-poly",
+	"license": "https://github.com/starcode911/phin-poly/LICENSE"
+	} ]
+}
