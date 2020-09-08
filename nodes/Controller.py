@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """
 Polyglot v2 node server pHin Smart Water Monitor data
+
+This version only support a single pHin monitor
+
 Copyright (C) 2020 starcode911
 """
 
@@ -16,6 +19,7 @@ import socket
 import math
 import re
 import json
+import uuid;
 import ns_parameters
 import node_funcs
 
@@ -28,36 +32,64 @@ class Controller(polyinterface.Controller):
 
     def __init__(self, polyglot):
         super(Controller, self).__init__(polyglot)
+
+
+        LOGGER.info('init')
+      
+
         self.name = 'pHin Smart Water Monitor'
         self.address = 'phin'
         self.primary = self.address
         self.configured = False
         self.uom = {}
+        self.logger = polyinterface.LOGGER
 
-        self.params = ns_parameters.NSParameters([{
-            'name': 'Token',
-            'default': 'set me',
-            'isRequired': True,
-            'notice': 'pHin oAuth Token needs to be set',
-            },
-             {
+        #
+        # Generate a UUID that will indentify this "device" 
+        #
+        self.uuid = str(uuid.uuid4())
+
+
+        self.params = ns_parameters.NSParameters([
+            {
             'name': 'email',
             'default': 'email',
             'isRequired': True,
-            'notice': 'Email you used to sign up for pHin',
+            'notice': 'Enter the email your used to sign up for the pHin service',
             },
              {
             'name': 'Verification Code',
             'default': 'set me',
             'isRequired': True,
-            'notice': 'Verification Code received by email ',
+            'notice': 'After you entered your email enter the Verification Code you received by email',
             },
+            {
+            'name': 'Token',
+            'default': '<do not enter>',
+            'isRequired': True,
+            'notice': '',
+            },
+           {
+            'name': 'uuid',
+            'default': self.uuid,
+            'isRequired': True,
+            'notice': '',
+            },
+             {
+            'name': 'vesselurl',
+            'default': '<do not enter>',
+            'isRequired': True,
+            'notice': '',
+            },
+
             ])
 
         self.poly.onConfig(self.process_config)
 
     # Process changes to customParameters
     def process_config(self, config):
+
+        LOGGER.info('process_config')
         (valid, changed) = self.params.update_from_polyglot(config)
         if changed and not valid:
             LOGGER.debug('-- configuration not yet valid')
@@ -70,9 +102,8 @@ class Controller(polyinterface.Controller):
             self.discover()
         elif valid:
             LOGGER.debug('-- configuration not changed, but is valid')
-            # is this necessary
-            #self.configured = True
 
+    
     def start(self):
         LOGGER.info('Starting node server')
         self.set_logging_level()
@@ -85,25 +116,28 @@ class Controller(polyinterface.Controller):
         self.query_conditions(True)
 
     def longPoll(self):
+        LOGGER.info('longPoll')
         return
 
     def shortPoll(self):
+        LOGGER.info('shortPoll')
         self.query_conditions(False)
 
     def get_phin_data(self, url_param, extra=None):
-        return NONE
+        LOGGER.info('get_phin_data')
+        return None
 
     """
         Query the pHin service for the pool data
     """
     def query_conditions(self, force):
 
-
+        LOGGER.info('query_conditions')
         #if not self.configured:
         #    LOGGER.info('Skipping connection because we aren\'t configured yet.')
         #    return
 
-        #jdata = self.get_phin_data('current')
+        jdata = self.get_phin_data('current')
 
         # Should we check that jdata actually has something in it?
         #if jdata == None:
@@ -111,8 +145,8 @@ class Controller(polyinterface.Controller):
         #  return
 
        
-        self.update_driver('WATERT', 101, force)
-        self.update_driver('GV1', 7.1, force)
+        self.setDriver('WATERT', '101', force)
+        self.setDriver('GV1', '7.1', force)
         
 
 
@@ -137,6 +171,7 @@ class Controller(polyinterface.Controller):
 
     def check_params(self):
 
+        LOGGER.info('check_params')
         # NEW code, try this:
         self.removeNoticesAll()
 
@@ -170,6 +205,10 @@ class Controller(polyinterface.Controller):
             level = int(level['value'])
 
         #self.setDriver('GV21', level, True, True)
+
+        # angelo
+        level=10
+
         self.save_log_level(level)
 
         LOGGER.info('set_logging_level: Setting log level to %d' % level)
