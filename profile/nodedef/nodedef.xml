@@ -5,6 +5,15 @@
       <st id="ST" editor="bool" />
       <st id="WATERT" editor="TEMPERATURE" />
       <st id="GV1" editor="PH" />
+      <st id="GV6" editor="PHSTATUS" />
+      <st id="GV7" editor="ORP" />
+      <st id="GV8" editor="ORPSTATUS" />
+      <st id="GV2" editor="POOLSTATUS" />
+      <st id="GV3" editor="TA" />
+      <st id="GV4" editor="CYA" />
+      <st id="GV5" editor="TH" />
+      <st id="GV9" editor="BATTERY" />
+      <st id="GV10" editor="RSSI" />
     </sts>
     <cmds>
       <sends />
@@ -12,11 +21,10 @@
         <cmd id="DISCOVER" />
         <cmd id="REMOVE_NOTICES_ALL" />
         <cmd id="UPDATE_PROFILE" />
-		<cmd id="DEBUG">
-			<p id="" editor="DEBUG" init="GV21"/>
-		</cmd>
+        <cmd id="DEBUG">
+           <p id="" editor="DEBUG" init="GV11"/>
+        </cmd>
       </accepts>
     </cmds>
   </nodeDef>
-
 </nodeDefs>

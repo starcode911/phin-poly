@@ -19,6 +19,9 @@ if __name__ == "__main__":
         control = Controller.Controller(polyglot)
         control.runForever()
     except (KeyboardInterrupt, SystemExit):
-        sys.exit(0)
-        
+        LOGGER.warning("Received interrupt or exit...")
+        polyglot.stop()
+    except Exception as err:
+        LOGGER.error('Exception: {0}'.format(err), exc_info=True)
+    sys.exit(0)
 

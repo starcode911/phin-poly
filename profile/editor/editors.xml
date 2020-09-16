@@ -9,13 +9,37 @@
         <range uom="17" min="-50" max="150" step="1" prec="1" />
         <range uom="4" min="-10" max="100" step="1" prec="1" />
     </editor>
-   
     <editor id="PH">
         <range uom="56" min="0" max="10" step="0.1" prec="1" />
     </editor>
+    <editor id="POOLSTATUS">
+        <range uom="25" min="0" max="3" nls="EN_POOLSTATUS" />
+    </editor>
+    <editor id="PHSTATUS">
+        <range uom="25" min="0" max="5" nls="EN_PHSTATUS" />
+    </editor>
+     <editor id="ORP">
+        <range uom="43" />
+    </editor>
+    <editor id="ORPSTATUS">
+        <range uom="25" min="0" max="5" nls="EN_ORPSTATUS" />
+    </editor>
+     <editor id="TA">
+        <range uom="54" />
+    </editor>
+     <editor id="CYA">
+        <range uom="54" />
+    </editor>
+     <editor id="TH">
+        <range uom="54" />
+    </editor>
+     <editor id="BATTERY">
+        <range uom="51" />
+    </editor>
+     <editor id="RSSI">
+        <range uom="12" />
     </editor>
 	<editor id="DEBUG">
 		<range uom="25" subset="0,10,20,30,40,50" nls="DBG" />
 	</editor>
-
 </editors>

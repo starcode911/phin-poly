@@ -8,7 +8,17 @@ CMD-ctl-DEBUG-NAME = Log Level
 ST-ctl-ST-NAME = NodeServer Online
 ST-ctl-WATERT-NAME = Water Temperature
 ST-ctl-GV1-NAME = pH
-ST-ctl-GV21-NAME = Debug Level
+ST-ctl-GV2-NAME = Status
+ST-ctl-GV3-NAME = Total Alkalinity
+ST-ctl-GV4-NAME = Cyanuric Acid
+ST-ctl-GV5-NAME = Total Hardness
+ST-ctl-GV6-NAME = pH Status
+ST-ctl-GV7-NAME = Sanitization (ORP)
+ST-ctl-GV8-NAME = Sanitization Status
+ST-ctl-GV9-NAME = Battery
+ST-ctl-GV10-NAME = Received Signal Strength Indicator
+
+ST-ctl-GV11-NAME = Debug Level
 
 DBG-0 = Off
 DBG-10 = Debug
@@ -17,6 +27,21 @@ DBG-30 = Warning
 DBG-40 = Error
 DBG-50 = Critical
 
+EN_POOLSTATUS-0 = Unknown
+EN_POOLSTATUS-1 = Balanced
+EN_POOLSTATUS-2 = Needs Attention
+EN_POOLSTATUS-3 = Needs Immediate Attention
 
+EN_PHSTATUS-0 = Unknown
+EN_PHSTATUS-1 = Needs Immediate Attention (Low)
+EN_PHSTATUS-2 = Needs Attention (Low)
+EN_PHSTATUS-3 = Ok
+EN_PHSTATUS-4 = Needs Attention (High)
+EN_PHSTATUS-5 = Needs Immediate Attention (High)
 
-
+EN_ORPSTATUS-0 = Unknown
+EN_ORPSTATUS-1 = Extemely Low
+EN_ORPSTATUS-2 = Very Low
+EN_ORPSTATUS-3 = Low
+EN_ORPSTATUS-4 = Low Normal
+EN_ORPSTATUS-5 = Normal
