@@ -19,25 +19,28 @@
         <range uom="25" min="0" max="5" nls="EN_PHSTATUS" />
     </editor>
      <editor id="ORP">
-        <range uom="43" />
+        <range uom="43" min="0" max="9999" />
     </editor>
     <editor id="ORPSTATUS">
         <range uom="25" min="0" max="5" nls="EN_ORPSTATUS" />
     </editor>
      <editor id="TA">
-        <range uom="54" />
+        <range uom="54" min="0" max="1000" />
     </editor>
      <editor id="CYA">
-        <range uom="54" />
+        <range uom="54" min="0" max="1000" />
     </editor>
      <editor id="TH">
-        <range uom="54" />
+        <range uom="54" min="0" max="3500" />
     </editor>
      <editor id="BATTERY">
-        <range uom="51" />
+        <range uom="51" min="0" max="100" />
     </editor>
      <editor id="RSSI">
-        <range uom="12" />
+        <range uom="12" min="-1000" max="1000" />
+    </editor>
+     <editor id="TESTSTRIP">
+        <range uom="2" subset="0,1" />
     </editor>
 	<editor id="DEBUG">
 		<range uom="25" subset="0,10,20,30,40,50" nls="DBG" />

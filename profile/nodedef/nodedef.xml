@@ -14,6 +14,7 @@
       <st id="GV5" editor="TH" />
       <st id="GV9" editor="BATTERY" />
       <st id="GV10" editor="RSSI" />
+      <st id="GV11" editor="bool" />
     </sts>
     <cmds>
       <sends />
@@ -22,7 +23,7 @@
         <cmd id="REMOVE_NOTICES_ALL" />
         <cmd id="UPDATE_PROFILE" />
         <cmd id="DEBUG">
-           <p id="" editor="DEBUG" init="GV11"/>
+           <p id="" editor="DEBUG" init="GV20"/>
         </cmd>
       </accepts>
     </cmds>

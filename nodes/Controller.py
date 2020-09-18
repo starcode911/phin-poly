@@ -30,7 +30,7 @@ class Controller(polyinterface.Controller):
 
     id = 'phin'
     hint = [0,0,0,0]
-
+ 
     def __init__(self, polyglot):
         super(Controller, self).__init__(polyglot)
 
@@ -125,12 +125,32 @@ class Controller(polyinterface.Controller):
         return vesselurl
 
 
+    def getLogLevel(self):
+        loglevel = self.getCustomParam('loglevel')
+        if loglevel is None:
+            loglevel = 10
+
+        loglevel = int(loglevel)
+
+        if loglevel < 0:
+            loglevel = 0
+
+        if loglevel > 50:
+            loglevel = 50
+
+        return loglevel
+
+
     #
     #
     #
-    def addActivationCodeParam(self):
+    def addActivationCodeParam(self, addNotice = False):
         LOGGER.debug('status=ADD_ACTIVATIONCODE_PARAM')
         self.addCustomParam({'activationcode' : '<Enter activation code>'})
+
+        if (addNotice is True):
+            self.addNotice('Please check your email and enter the 5-digit activation code', 'activationcode')
+
 
 
     # 
@@ -142,13 +162,13 @@ class Controller(polyinterface.Controller):
 
         self.configuring = True
 
-        self.addNotice('Please check your email and enter the 5-digit activation code', 'activationcode')
+        self.removeNoticesAll()
 
         self.removeCustomParam('authtoken')
         self.removeCustomParam('vesselurl')
         self.removeCustomParam('activationcode')
 
-        self.addActivationCodeParam()
+        self.addActivationCodeParam(True)
 
         self.registering = False
         self.registered = False
@@ -239,13 +259,18 @@ class Controller(polyinterface.Controller):
                                 )
 
                     verifyurl = self.phin.login(self.getEmail(), self.getUUID())
+
                     self.addCustomParam({'verifyurl' : verifyurl})
 
+                    LOGGER.info("status=CONFIG_REGISTER_COMPLETED email=%s uuid=%s verifyurl=%s", 
+                                    self.getEmail(), 
+                                    self.getUUID(),
+                                    self.getVerifyURL(),
+                                )
+                 
                     self.removeNoticesAll()
 
-                    self.addActivationCodeParam()
-
-                    self.addNotice('Please check your email and enter the 5-digit activation code', 'activationcode')
+                    self.addActivationCodeParam(True)
 
                     self.registering = False
                     self.registered = True
@@ -311,7 +336,6 @@ class Controller(polyinterface.Controller):
     def start(self):
         LOGGER.info('Starting node server')
         self.setLogLevel()
-        self.discover()
 
         LOGGER.info('Node server started')
 
@@ -322,7 +346,6 @@ class Controller(polyinterface.Controller):
 
     def longPoll(self):
         LOGGER.info('longPoll')
-        return
 
     def shortPoll(self):
         LOGGER.info('shortPoll')
@@ -355,30 +378,80 @@ class Controller(polyinterface.Controller):
 
             LOGGER.debug('phin.getData data='+str(data))
             if data:
-                LOGGER.info("setDriver WATERT=%s", data['waterData']['temperature'])
-                self.setDriver('WATERT', data['waterData']['temperature'], force=True)
-                self.setDriver('GV2', int(data['pool']['status_id']), force=True)
-                self.setDriver('GV3', data['waterData']['ta'], force=True)
-                self.setDriver('GV4', data['waterData']['cya'], force=True)
-                self.setDriver('GV5', data['waterData']['th'], force=True)
-                self.setDriver('GV1', round(data['waterData']['ph']['value'], 1), force=True)
-                self.setDriver('GV6', int(data['waterData']['ph']['status']), force=True)
-                self.setDriver('GV7', data['waterData']['orp']['value'], force=True)
-                self.setDriver('GV8', int(data['waterData']['orp']['status']), force=True)
-                self.setDriver('GV9', (data['vesselData']['battery']['percentage']*100), force=True)
-                self.setDriver('GV10', data['vesselData']['rssi']['value'], force=True)
+                if data.__contains__("pool"):
+                    poolData = data["pool"]
+                    if poolData.__contains__("status_id"):
+                        self.setDriver('GV2', int(poolData['status_id']), force=True)
+                    if poolData.__contains__("test_strip_required"):
+                        teststrip = 0
+                        if poolData['test_strip_required'] is True:
+                            teststrip = 1 
+                        self.setDriver('GV11', teststrip, force=True)
+                else:
+                     LOGGER.error("status=no_pooldata")
+
+                if data.__contains__("waterData"):
+                    waterData = data["waterData"]
+                    if waterData.__contains__("temperature"):
+                        self.setDriver('WATERT', waterData['temperature'], force=True)
+                    if waterData.__contains__("ta"):
+                        self.setDriver('GV3', waterData['ta'], force=True)
+                    if waterData.__contains__("cya"):
+                        self.setDriver('GV4', waterData['cya'], force=True)
+                    if waterData.__contains__("th"):
+                        self.setDriver('GV5', waterData['th'], force=True)
+
+                    if waterData.__contains__("ph"):
+                        phData = waterData['ph']
+                        if phData.__contains__("value"):
+                            self.setDriver('GV1', round(phData['value'], 1), force=True)
+                        if phData.__contains__("status"):
+                            self.setDriver('GV6', int(phData['status']), force=True)
+                    else:
+                        LOGGER.error("status=no_ph")
+
+                    if waterData.__contains__("orp"):
+                        orpData = waterData['orp']
+                        if orpData.__contains__("value"):
+                            self.setDriver('GV7', orpData['value'], force=True)
+                        if orpData.__contains__("status"):
+                            self.setDriver('GV8', int(orpData['status']), force=True)
+                    else:
+                        LOGGER.error("status=no_orpdata")
+                else:
+                    LOGGER.error("status=no_waterdata")
+
+
+                if data.__contains__("vesselData"):
+
+                    vesselData = data["vesselData"]
+
+                    if vesselData.__contains__("battery"):
+                            batteryData = vesselData["battery"]
+
+                            if batteryData.__contains__("percentage"):
+                                self.setDriver('GV9', (batteryData['percentage']*100), force=True)
+                    else:
+                        LOGGER.error("status=no_batterydata")
+
+                    if vesselData.__contains__("rssi"):  
+                            rssiData = vesselData["rssi"]
+
+                            if rssiData.__contains__("value"):
+                                self.setDriver('GV10', data['vesselData']['rssi']['value'], force=True)
+                    else:
+                        LOGGER.error("status=no_rssidata")
+                else:
+                    LOGGER.error("status=no_vesseldata")
+
         else:
                 LOGGER.debug("status=noauthtoken")
             
 
     def query(self):
-        LOGGER.info('query...')
+        LOGGER.info('query')
         self.reportDrivers()
 
-    def discover(self, *args, **kwargs):
-       LOGGER.info('Discover node server')
-
-    # Delete the node server from Polyglot
     def delete(self):
         LOGGER.info('Removing node server')
 
@@ -396,21 +469,25 @@ class Controller(polyinterface.Controller):
     def removeAllNotices(self, command):
         self.removeNoticesAll()
 
+
     #
     #
     #
     def setLogLevel(self, level=None):
         LOGGER.debug("loglevel=%s", str(level))
 
-        # angelo
-        level=10
+        if level is None:
+            loglevel = self.getLogLevel()
+        else:
+            if level is not None:
+                if level.__contains__("value"):
+                    loglevel = int(level["value"])
 
-        #self.save_log_level(level)
+        self.setDriver('GV20', int(loglevel), force=True)
+        self.addCustomParam({'loglevel' : loglevel})
 
-        LOGGER.info('setLogLevel: Setting log level to %d' % level)
-        LOGGER.setLevel(level)
-
-
+        LOGGER.info('loglevel=%d', loglevel)
+        LOGGER.setLevel(loglevel)
 
 
     commands = {
@@ -436,7 +513,8 @@ class Controller(polyinterface.Controller):
             {'driver': 'GV8', 'value': 0, 'uom': 25},       # ORP Status
             {'driver': 'GV9', 'value': 0, 'uom': 51},       # Battery
             {'driver': 'GV10', 'value': 0, 'uom': 12},       # RSSI
-            {'driver': 'GV11', 'value': 0, 'uom': 25},     # log level
+            {'driver': 'GV11', 'value': 0, 'uom': 2},       # Test Strip
+            {'driver': 'GV20', 'value': 0, 'uom': 25},     # log level
     ]
 
 

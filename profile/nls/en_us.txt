@@ -17,8 +17,8 @@ ST-ctl-GV7-NAME = Sanitization (ORP)
 ST-ctl-GV8-NAME = Sanitization Status
 ST-ctl-GV9-NAME = Battery
 ST-ctl-GV10-NAME = Received Signal Strength Indicator
-
-ST-ctl-GV11-NAME = Debug Level
+ST-ctl-GV11-NAME = Dip a Test Strip
+ST-ctl-GV20-NAME = Debug Level
 
 DBG-0 = Off
 DBG-10 = Debug
