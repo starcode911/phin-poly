@@ -502,7 +502,7 @@ class Controller(polyinterface.Controller):
     #
     drivers = [
             {'driver': 'ST', 'value': 1, 'uom': 2},   # node server status
-            {'driver': 'WATERT', 'value': 0, 'uom': 4},   # water temperature
+            {'driver': 'WATERT', 'value': 0, 'uom': 17},   # water temperature
             {'driver': 'GV1', 'value': 0, 'uom': 56},       # pH level
             {'driver': 'GV2', 'value': 0, 'uom': 25},       # status
             {'driver': 'GV3', 'value': 0, 'uom': 54},       # TA

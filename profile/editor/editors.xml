@@ -7,7 +7,6 @@
     </editor>
     <editor id="TEMPERATURE">
         <range uom="17" min="-50" max="150" step="1" prec="1" />
-        <range uom="4" min="-10" max="100" step="1" prec="1" />
     </editor>
     <editor id="PH">
         <range uom="56" min="0" max="10" step="0.1" prec="1" />
