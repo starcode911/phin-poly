@@ -70,7 +70,7 @@ class pHin():
 			"versionCheck": "/version"
 		}
 		'''
-		urls = json.loads(requests.get(self.baseUrl + "/urls").text)
+		urls = json.loads(self.requestGet(self.baseUrl + "/urls").text)
 
 		''' signin
 		{
@@ -79,7 +79,7 @@ class pHin():
 			"token": <token>
 		}
 		'''
-		req = requests.post(self.baseUrl+urls["signin"],
+		req = self.requestPost(self.baseUrl+urls["signin"],
 			json={"contact":contact,"deviceType":"python"},
 			headers=self.createHeader(deviceUUID))
 
@@ -120,7 +120,7 @@ class pHin():
 			}
 		}
 		'''
-		req = requests.post(
+		req = self.requestPost(
 			self.baseUrl+verifyUrl,
 			json={"contact":contact,
 				"deviceId":deviceUUID,
@@ -166,7 +166,7 @@ class pHin():
 		   ]
 		}
 		'''
-		req = requests.get(
+		req = self.requestGet(
 			self.baseUrl+locationUrl,
 			headers=self.createHeader(deviceUUID, authToken, "2.0.1")
 			)
@@ -194,6 +194,7 @@ class pHin():
 
 	'''
 	def getData(self, authToken, deviceUUID, vesselUrl):
+
 		def merge(dict_list):
 		    merged = {}
 		    for item in dict_list:
@@ -221,7 +222,7 @@ class pHin():
 	def getWaterData(self, authToken, deviceUUID, vesselUrl):
 
 
-		req = requests.get(
+		req = self.requestGet(
 			self.baseUrl+vesselUrl,
 			headers=self.createHeader(deviceUUID, authToken, "2.0.0")
 			)
@@ -304,7 +305,7 @@ class pHin():
 		return returnData
 
 	def getChartData(self, authToken, deviceUUID, chartUrl):
-		req = requests.get(
+		req = self.requestGet(
 			self.baseUrl + chartUrl,
 			headers=self.createHeader(deviceUUID, authToken, "1.0.0")
 			)
@@ -413,6 +414,19 @@ class pHin():
 		if authToken != None:
 			headers["Authorization"] = "Bearer " + authToken
 		return headers
+
+	def requestGet(self,url,headers={}):
+		try:
+			return requests.get(url,headers=headers)
+		except requests.ConnectionError:
+			self.logger.critical("Cannot Connect to Server")
+			raise requests.ConnectionError
+	def requestPost(self,url,json={},headers={}):
+		try:
+			return requests.post(url,headers=headers,json=json)
+		except requests.ConnectionError:
+			self.logger.critical("Cannot Connect to Server")
+			raise requests.ConnectionError
 
 	def checkRequest(self, request):
 		if request == None:
